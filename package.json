@@ -19,7 +19,7 @@
   "main": "index.js",
   "bin": "./bin/regex-replace",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c && chmod a+x bin/regex-replace"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

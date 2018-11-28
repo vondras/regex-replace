@@ -17,7 +17,6 @@ export default [{
     filesize()
   ],
   output: {
-    sourcemap: 'inline',
     file: bin,
     format: 'cjs',
     banner: '#!/usr/bin/env node'
