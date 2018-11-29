@@ -4,6 +4,7 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var assert = _interopDefault(require('assert'));
+var vm = _interopDefault(require('vm'));
 var stream = require('stream');
 var stream__default = _interopDefault(stream);
 var events = _interopDefault(require('events'));
@@ -1402,6 +1403,17 @@ function parseReplacement (delimiter, escapeChar, globalFlags) {
     assert(pattern !== '', RangeError('Pattern cannot be blank'));
 
     replacement = replacement.replace(escaper, '');
+
+    if (/^(fn|javascript):\s*\([^)]+\)\s*=>\s*\{?[^}]*\}?$/.test(replacement)) {
+      const code = `;(${replacement.replace(/^(fn|javascript):\s*/, '')})(...args)`;
+      replacement = function (...args) {
+        const sandbox = {
+          args
+        };
+
+        return vm.runInNewContext(code, sandbox)
+      };
+    }
 
     const localFlags = new FlagSet(globalFlags);
 

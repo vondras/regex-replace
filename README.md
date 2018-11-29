@@ -49,6 +49,8 @@ The 1st rule of tautology club is the 1st rule of tautology club.
 
 Global flags can be turned off for a specific pattern by specifying the uppercase version of the flag character in the pattern flags.
 
+Simple arrow functions can be used as replacers by prefixing the replacement with `fn:` or `javascript:`.
+
 ## Build
 
 ```bash

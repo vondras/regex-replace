@@ -1,5 +1,6 @@
 import fs from 'fs'
 import assert from 'assert'
+import vm from 'vm'
 import { Transform, PassThrough, pipeline } from 'stream'
 import ReadlineTransform from 'readline-transform'
 import program from 'commander'
@@ -84,6 +85,17 @@ function parseReplacement (delimiter, escapeChar, globalFlags) {
     assert(pattern !== '', RangeError('Pattern cannot be blank'))
 
     replacement = replacement.replace(escaper, '')
+
+    if (/^(fn|javascript):\s*\([^)]+\)\s*=>\s*\{?[^}]*\}?$/.test(replacement)) {
+      const code = `;(${replacement.replace(/^(fn|javascript):\s*/, '')})(...args)`
+      replacement = function (...args) {
+        const sandbox = {
+          args
+        }
+
+        return vm.runInNewContext(code, sandbox)
+      }
+    }
 
     const localFlags = new FlagSet(globalFlags)
 
