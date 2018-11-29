@@ -1,17 +1,29 @@
 {
   "name": "regex-replace",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "build": "rollup -c"
+  "homepage": "https://github.com/vondras/regex-replace#readme",
+  "bugs": {
+    "url": "https://github.com/vondras/regex-replace/issues",
+    "email": "clayton@vondr.as"
   },
-  "dependencies": {
-    "commander": "^2.19.0",
-    "readline-transform": "^0.9.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vondras/regex-replace.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Clayton VonDras",
+    "email": "clayton@vondr.as",
+    "url": "https://vondr.as"
+  },
+  "main": "index.js",
+  "bin": "./bin/regex-replace",
+  "scripts": {
+    "build": "rollup -c && chmod a+x bin/regex-replace"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
+    "commander": "^2.19.0",
     "eslint": "^5.9.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-friendly-formatter": "^4.0.1",
@@ -19,11 +31,19 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "readline-transform": "^0.9.0",
     "rollup": "^0.67.3",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-eslint": "^5.0.0",
     "rollup-plugin-filesize": "^5.0.1",
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-resolve": "^3.4.0"
-  }
+  },
+  "engines": {
+    "node": ">=10.6.0"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ]
 }

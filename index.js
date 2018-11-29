@@ -1,5 +1,6 @@
 import fs from 'fs'
 import assert from 'assert'
+import vm from 'vm'
 import { Transform, PassThrough, pipeline } from 'stream'
 import ReadlineTransform from 'readline-transform'
 import program from 'commander'
@@ -17,7 +18,7 @@ class FlagSet extends Set {
     if (flag.length === 1) {
       const _flag = flag.toLowerCase()
       assert(FlagSet.validFlags.has(_flag), RangeError('Flag must be a valid RegExp flag'))
-      return flag === _flag ? this.add(flag) : this.delete(flag)
+      return flag === _flag ? this.add(_flag) : this.delete(_flag)
     } else {
       for (let letter of flag) {
         this.set(letter)
@@ -77,12 +78,24 @@ function parseReplacement (delimiter, escapeChar, globalFlags) {
   const splitter = RegExp(`(?<!${escapeChar})${delimiter}`, 'g')
   return function parse (pair) {
     const components = pair.split(splitter)
-    assert(components.length === 3, `Replacement pattern is not well formed, should have exactly two delimiters: ${pair}`)
+    assert(components.length > 1 && components.length <= 3,
+      `Replacement pattern is not well formed, should have at least one and fewer than three delimiters: ${pair} ${components}`)
 
-    let [ pattern, replacement, flags ] = components
+    let [ pattern, replacement, flags = '' ] = components
     assert(pattern !== '', RangeError('Pattern cannot be blank'))
 
     replacement = replacement.replace(escaper, '')
+
+    if (/^(fn|javascript):\s*\([^)]+\)\s*=>\s*\{?[^}]*\}?$/.test(replacement)) {
+      const code = `'use strict';(${replacement.replace(/^(fn|javascript):\s*/, '')})(...args)`
+      replacement = function (...args) {
+        const sandbox = {
+          args
+        }
+
+        return vm.runInNewContext(code, sandbox)
+      }
+    }
 
     const localFlags = new FlagSet(globalFlags)
 

@@ -4,7 +4,7 @@ import { eslint } from 'rollup-plugin-eslint'
 import builtins from 'builtin-modules'
 import filesize from 'rollup-plugin-filesize'
 import json from 'rollup-plugin-json'
-import { name } from './package.json'
+import { bin } from './package.json'
 
 export default [{
   input: 'index.js',
@@ -17,8 +17,7 @@ export default [{
     filesize()
   ],
   output: {
-    dir: 'bin',
-    file: name,
+    file: bin,
     format: 'cjs',
     banner: '#!/usr/bin/env node'
   }
