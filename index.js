@@ -18,7 +18,7 @@ class FlagSet extends Set {
     if (flag.length === 1) {
       const _flag = flag.toLowerCase()
       assert(FlagSet.validFlags.has(_flag), RangeError('Flag must be a valid RegExp flag'))
-      return flag === _flag ? this.add(flag) : this.delete(flag)
+      return flag === _flag ? this.add(_flag) : this.delete(_flag)
     } else {
       for (let letter of flag) {
         this.set(letter)
@@ -87,7 +87,7 @@ function parseReplacement (delimiter, escapeChar, globalFlags) {
     replacement = replacement.replace(escaper, '')
 
     if (/^(fn|javascript):\s*\([^)]+\)\s*=>\s*\{?[^}]*\}?$/.test(replacement)) {
-      const code = `;(${replacement.replace(/^(fn|javascript):\s*/, '')})(...args)`
+      const code = `'use strict';(${replacement.replace(/^(fn|javascript):\s*/, '')})(...args)`
       replacement = function (...args) {
         const sandbox = {
           args
