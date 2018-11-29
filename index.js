@@ -77,9 +77,10 @@ function parseReplacement (delimiter, escapeChar, globalFlags) {
   const splitter = RegExp(`(?<!${escapeChar})${delimiter}`, 'g')
   return function parse (pair) {
     const components = pair.split(splitter)
-    assert(components.length === 3, `Replacement pattern is not well formed, should have exactly two delimiters: ${pair}`)
+    assert(components.length > 1 && components.length <= 3,
+      `Replacement pattern is not well formed, should have at least one and fewer than three delimiters: ${pair} ${components}`)
 
-    let [ pattern, replacement, flags ] = components
+    let [ pattern, replacement, flags = '' ] = components
     assert(pattern !== '', RangeError('Pattern cannot be blank'))
 
     replacement = replacement.replace(escaper, '')
